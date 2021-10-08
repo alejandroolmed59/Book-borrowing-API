@@ -1,7 +1,7 @@
 package com.olmedo.bookborrowing.controller;
 
 import com.olmedo.bookborrowing.entity.Role;
-import com.olmedo.bookborrowing.repository.RoleRepository;
+import com.olmedo.bookborrowing.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,16 +12,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/role")
 public class RoleController {
     @Autowired
-    RoleRepository roleRepository;
+    RoleService roleService;
 
     @GetMapping("/")
     public List<Role> getRol() {
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = roleService.findAll();
         return roles;
     }
     @PostMapping("/")
     public Role create(@RequestBody Role role) throws Exception {
-        Role createdRole = roleRepository.save(role);
+        Role createdRole = roleService.create(role);
 
         if (createdRole==null) {
             throw new Exception("BedType were not created");

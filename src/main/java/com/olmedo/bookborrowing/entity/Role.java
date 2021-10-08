@@ -21,8 +21,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Table(name = "ROLE")
-public class Role implements Serializable{
-    private static final long serialVersionUID = 5433713775530016813L;
+public class Role {
 
     @Id
     @Column(name="ROLE_ID", updatable=false)
