@@ -17,6 +17,12 @@ public class UserController {
     public List<User> getUsers(){
         return userService.findAll();
     }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable("id") String id){
+        return userService.findById(id);
+    }
+
     @PostMapping("/")
     public User create(@RequestBody User newUser) throws Exception {
         User createdUser = userService.create(newUser);
@@ -27,5 +33,7 @@ public class UserController {
             return createdUser;
         }
     }
+
+
 
 }
