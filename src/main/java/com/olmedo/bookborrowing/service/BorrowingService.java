@@ -15,4 +15,11 @@ public class BorrowingService {
     public List<Borrowing> findAll(){return borrowingRepository.findAll();}
 
     public Borrowing create(Borrowing newBorrow){return borrowingRepository.save(newBorrow);}
+
+    public Borrowing getBorrow(String UserId, String BookISBN){return borrowingRepository.findByUserObjUserIdAndBookObjBookISBN(UserId, BookISBN);}
+
+    public Borrowing penalize(Borrowing returningBook, double fee){
+        returningBook.setPenalization(fee);
+        return borrowingRepository.save(returningBook);
+    }
 }

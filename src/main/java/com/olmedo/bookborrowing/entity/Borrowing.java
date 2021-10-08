@@ -13,7 +13,8 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @Table(name = "BORROWING")
-public class Borrowing {@Id
+public class Borrowing {
+    @Id
     @Column(name="ORDER_ID", updatable=false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(message = "OrderId is required")
@@ -24,6 +25,9 @@ public class Borrowing {@Id
 
     @Column(name="DUE_DATE", updatable=true)
     private LocalDate dueDate;
+
+    @Column(name="REAL_RETURN_DATE", updatable=true)
+    private LocalDate realReturnDate;
 
     @Column(name="RENEWAL_FOIS", updatable=true)
     private int renewalFois = 0;
