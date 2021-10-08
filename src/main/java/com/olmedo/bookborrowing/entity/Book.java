@@ -28,6 +28,9 @@ public class Book {
     @NotNull(message = "Year is required")
     private String year;
 
+    @Column(name="AVAILABLE", updatable=true)
+    private Boolean available;
+
     @Column(name="AUTHOR", updatable=true)
     private String author;
 

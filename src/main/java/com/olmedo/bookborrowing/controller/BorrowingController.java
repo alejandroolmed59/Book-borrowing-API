@@ -1,10 +1,12 @@
 package com.olmedo.bookborrowing.controller;
 
+import com.olmedo.bookborrowing.entity.Book;
 import com.olmedo.bookborrowing.entity.Borrowing;
 import com.olmedo.bookborrowing.entity.User;
 import com.olmedo.bookborrowing.exception.MaxBooksPerUserException;
 import com.olmedo.bookborrowing.pojo.ReturnBook;
 import com.olmedo.bookborrowing.repository.UserRepository;
+import com.olmedo.bookborrowing.service.BookService;
 import com.olmedo.bookborrowing.service.BorrowingService;
 import com.olmedo.bookborrowing.service.UserService;
 import com.olmedo.bookborrowing.utils.Constants;
@@ -27,6 +29,9 @@ public class BorrowingController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    BookService bookService;
+
     @GetMapping("/")
     public List<Borrowing> getAllBorrows() {
         List<Borrowing> borrows = borrowingService.findAll();
@@ -44,7 +49,7 @@ public class BorrowingController {
         responseHeaders.set("estado", "created");
         return new ResponseEntity<Borrowing>(createdBorrowing, responseHeaders, HttpStatus.CREATED);
     }
-
+    //TODO: RESTAR UN LIBRO CUANDO SE DEVUELVE AL USUARIO Y CAMBIAR DISPONIBILIDAD A TRUE EN EL LIBRO
     @PostMapping("/return")
     public ResponseEntity<Borrowing> returnBook(@RequestBody ReturnBook returnObj) throws Exception {
         Borrowing returnedBook = borrowingService.getBorrow(returnObj.getUserId(), returnObj.getBookISBN());
@@ -62,7 +67,7 @@ public class BorrowingController {
 
     public Borrowing formatBorrowEntity(Borrowing borrowing) throws Exception{
         User user = userRepository.findByUserId(borrowing.getUserObj().getUserId());
-
+        Book book = bookService.findByIsbn(borrowing.getBookObj().getBookISBN());
         if(user.getBorrowedBooks()>=3){
             throw new MaxBooksPerUserException("User can no borrow more than "+Constants.MAX_BOOKS_PER_USER+" books at the same time");
         }
@@ -72,6 +77,9 @@ public class BorrowingController {
         }
         user.setBorrowedBooks(user.getBorrowedBooks()+1);
         userRepository.save(user);
+
+        book.setAvailable(false);
+        bookService.create(book);
         return borrowing;
     }
 
