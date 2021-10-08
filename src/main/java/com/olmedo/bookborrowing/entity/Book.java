@@ -1,11 +1,13 @@
 package com.olmedo.bookborrowing.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,4 +35,9 @@ public class Book {
     @JoinColumn(name = "GENRE_ID", nullable = false)
     @NotNull(message = "Genre is required")
     private Genre genreObj;
+
+    @Transient
+    @JsonIgnore
+    @OneToMany(mappedBy = "bookObj")
+    private List<Borrowing> borrows;
 }

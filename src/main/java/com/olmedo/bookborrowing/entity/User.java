@@ -1,11 +1,13 @@
 package com.olmedo.bookborrowing.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,4 +39,9 @@ public class User {
     @JoinColumn(name = "ROLE_ID", nullable = false)
     @NotNull(message = "BedType is required")
     private Role roleObj;
+
+    @Transient
+    @JsonIgnore
+    @OneToMany(mappedBy = "userObj")
+    private List<Borrowing> borrows;
 }

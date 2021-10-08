@@ -34,7 +34,7 @@ public class BorrowingController {
         }
     }
     @PostMapping("/testis")
-    public ResponseEntity<Borrowing> testis(@RequestBody Borrowing borrowing) {
+    public ResponseEntity<Borrowing> testis(@RequestBody Borrowing borrowing) throws Exception {
         System.out.println(borrowing);
         borrowing = formatBorrowEntity(borrowing);
 
@@ -44,7 +44,7 @@ public class BorrowingController {
         return new ResponseEntity<Borrowing>(createdBorrowing, responseHeaders, HttpStatus.CREATED);
     }
 
-    public Borrowing formatBorrowEntity(Borrowing borrowing){
+    public Borrowing formatBorrowEntity(Borrowing borrowing) throws Exception{
         if(borrowing.getDueDate()==null){
             borrowing.setDueDate(borrowing.getBorrowDate().plusDays(Constants.MAX_BORROW_DAYS));
         }

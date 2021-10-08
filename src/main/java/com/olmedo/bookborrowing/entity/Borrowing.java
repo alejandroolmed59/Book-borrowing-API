@@ -31,6 +31,9 @@ public class Borrowing {@Id
     @Column(name="PENALIZATION", updatable=true)
     private Double penalization = 0.0;
 
+    @Column(name = "DELIVERED", updatable = true)
+    private Boolean delivered = false;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "BOOK_ISBN", nullable = false)
     @NotNull(message = "Book is required")
