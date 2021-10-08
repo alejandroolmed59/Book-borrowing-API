@@ -14,5 +14,7 @@ public class BookService {
 
     public List<Book> findAll(){return bookRepository.findAll();}
 
+    public Book findByIsbn(String ISBN){return bookRepository.findByBookISBN(ISBN);}
+
     public Book create(Book newBook){return bookRepository.save(newBook);}
 }

@@ -53,7 +53,9 @@ public class BorrowingController {
         }
         int daysAfterBorrow = (int) ChronoUnit.DAYS.between(returnedBook.getBorrowDate(), LocalDate.now());
         if(daysAfterBorrow>Constants.MAX_BORROW_DAYS){
-            returnedBook = borrowingService.penalize(returnedBook, Constants.PENALIZATION_FEE_PER_DAY_LATE*(daysAfterBorrow-Constants.MAX_BORROW_DAYS));
+            returnedBook = borrowingService.penalizeAndDeliver(returnedBook, Constants.PENALIZATION_FEE_PER_DAY_LATE*(daysAfterBorrow-Constants.MAX_BORROW_DAYS));
+        }else{
+            returnedBook = borrowingService.delivered(returnedBook);
         }
         return ResponseEntity.ok(returnedBook);
     }
