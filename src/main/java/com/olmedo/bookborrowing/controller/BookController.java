@@ -27,7 +27,7 @@ public class BookController {
         if (createdBook==null) {
             throw new Exception("Genre was not created");
         } else {
-            return book;
+            return createdBook;
         }
     }
 }

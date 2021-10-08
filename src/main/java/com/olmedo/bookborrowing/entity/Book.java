@@ -29,7 +29,7 @@ public class Book {
     @Column(name="AUTHOR", updatable=true)
     private String author;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "GENRE_ID", nullable = false)
     @NotNull(message = "Genre is required")
     private Genre genreObj;

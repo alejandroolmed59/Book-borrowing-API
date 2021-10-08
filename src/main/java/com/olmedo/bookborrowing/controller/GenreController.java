@@ -27,7 +27,7 @@ public class GenreController {
         if (createdGenre==null) {
             throw new Exception("Genre was not created");
         } else {
-            return genre;
+            return createdGenre;
         }
     }
 }

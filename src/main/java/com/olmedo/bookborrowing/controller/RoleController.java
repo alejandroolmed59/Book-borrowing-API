@@ -26,7 +26,7 @@ public class RoleController {
         if (createdRole==null) {
             throw new Exception("BedType were not created");
         } else {
-            return role;
+            return createdRole;
         }
     }
 }

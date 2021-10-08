@@ -33,7 +33,7 @@ public class User {
     @Column(name="BORROWED_BOOKS", updatable=true, columnDefinition = "Default is 0")
     private int borrowedBooks=0;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROLE_ID", nullable = false)
     @NotNull(message = "BedType is required")
     private Role roleObj;
