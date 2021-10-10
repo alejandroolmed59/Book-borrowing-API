@@ -3,6 +3,7 @@ package com.olmedo.bookborrowing.controller;
 import com.olmedo.bookborrowing.entity.Book;
 import com.olmedo.bookborrowing.entity.Borrowing;
 import com.olmedo.bookborrowing.entity.User;
+import com.olmedo.bookborrowing.exception.BookAlreadyReservedException;
 import com.olmedo.bookborrowing.exception.MaxBooksPerUserException;
 import com.olmedo.bookborrowing.pojo.ReturnBook;
 import com.olmedo.bookborrowing.repository.UserRepository;
@@ -49,13 +50,24 @@ public class BorrowingController {
         responseHeaders.set("estado", "created");
         return new ResponseEntity<Borrowing>(createdBorrowing, responseHeaders, HttpStatus.CREATED);
     }
-    //TODO: RESTAR UN LIBRO CUANDO SE DEVUELVE AL USUARIO Y CAMBIAR DISPONIBILIDAD A TRUE EN EL LIBRO
+    //TODO: RESTAR UN LIBRO CUANDO SE DEVUELVE AL USUARIO Y CAMBIAR DISPONIBILIDAD A TRUE EN EL LIBRO ---- DONE ✔️
     @PostMapping("/return")
     public ResponseEntity<Borrowing> returnBook(@RequestBody ReturnBook returnObj) throws Exception {
         Borrowing returnedBook = borrowingService.getBorrow(returnObj.getUserId(), returnObj.getBookISBN());
         if (returnedBook==null) {
             throw new Exception("Borrowing not found");
         }
+        //RESTAR LIBRO AL USUARIO
+        User currUser = returnedBook.getUserObj();
+        currUser.setBorrowedBooks(currUser.getBorrowedBooks()-1);
+        userRepository.save(currUser);
+        returnedBook.setUserObj(currUser);
+        //CAMBIAR DISPONIBILIDAD LIBRO
+        Book currBook = returnedBook.getBookObj();
+        currBook.setAvailable(true);
+        bookService.create(currBook);
+        returnedBook.setBookObj(currBook);
+        //PENALIZATION
         int daysAfterBorrow = (int) ChronoUnit.DAYS.between(returnedBook.getBorrowDate(), LocalDate.now());
         if(daysAfterBorrow>Constants.MAX_BORROW_DAYS){
             returnedBook = borrowingService.penalizeAndDeliver(returnedBook, Constants.PENALIZATION_FEE_PER_DAY_LATE*(daysAfterBorrow-Constants.MAX_BORROW_DAYS));
@@ -71,10 +83,13 @@ public class BorrowingController {
         if(user.getBorrowedBooks()>=3){
             throw new MaxBooksPerUserException("User can no borrow more than "+Constants.MAX_BOOKS_PER_USER+" books at the same time");
         }
-
+        if(book.getAvailable()==false){
+            throw new BookAlreadyReservedException("Book is already taken!");
+        }
         if(borrowing.getDueDate()==null){
             borrowing.setDueDate(borrowing.getBorrowDate().plusDays(Constants.MAX_BORROW_DAYS));
         }
+
         user.setBorrowedBooks(user.getBorrowedBooks()+1);
         userRepository.save(user);
 

@@ -18,7 +18,7 @@ public class BorrowingService {
 
     public Borrowing create(Borrowing newBorrow){return borrowingRepository.save(newBorrow);}
 
-    public Borrowing getBorrow(String UserId, String BookISBN){return borrowingRepository.findByUserObjUserIdAndBookObjBookISBN(UserId, BookISBN);}
+    public Borrowing getBorrow(String UserId, String BookISBN){return borrowingRepository.findByUserObjUserIdAndBookObjBookISBNAndDeliveredFalse(UserId, BookISBN);}
 
     public Borrowing penalizeAndDeliver(Borrowing returningBook, double fee){
         returningBook.setPenalization(fee);
