@@ -2,6 +2,7 @@ package com.olmedo.bookborrowing.service;
 
 import com.olmedo.bookborrowing.entity.Borrowing;
 import com.olmedo.bookborrowing.repository.BorrowingRepository;
+import com.olmedo.bookborrowing.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +30,12 @@ public class BorrowingService {
         returnedBook.setDelivered(true);
         returnedBook.setRealReturnDate(LocalDate.now());
         return borrowingRepository.save(returnedBook);
+    }
+
+    public Borrowing renew(Borrowing renewedBook) {
+        renewedBook.setBorrowDate(LocalDate.now());
+        renewedBook.setDueDate(LocalDate.now().plusDays(Constants.MAX_BORROW_DAYS));
+        renewedBook.setRenewalFois(renewedBook.getRenewalFois()+1);
+        return borrowingRepository.save(renewedBook);
     }
 }

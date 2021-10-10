@@ -67,7 +67,7 @@ public class BorrowingController {
         currBook.setAvailable(true);
         bookService.create(currBook);
         returnedBook.setBookObj(currBook);
-        //PENALIZATION
+        //PENALIZATION AND RETURN
         int daysAfterBorrow = (int) ChronoUnit.DAYS.between(returnedBook.getBorrowDate(), LocalDate.now());
         if(daysAfterBorrow>Constants.MAX_BORROW_DAYS){
             returnedBook = borrowingService.penalizeAndDeliver(returnedBook, Constants.PENALIZATION_FEE_PER_DAY_LATE*(daysAfterBorrow-Constants.MAX_BORROW_DAYS));
@@ -75,6 +75,41 @@ public class BorrowingController {
             returnedBook = borrowingService.delivered(returnedBook);
         }
         return ResponseEntity.ok(returnedBook);
+    }
+
+    @PostMapping("/renew")
+    public ResponseEntity renewBook(@RequestBody ReturnBook returnObj) throws Exception{
+        Borrowing renewedBook = borrowingService.getBorrow(returnObj.getUserId(), returnObj.getBookISBN());
+        if (renewedBook==null) {
+            throw new Exception("Borrowing not found");
+        }
+        User currUser = renewedBook.getUserObj();
+        Book currBook = renewedBook.getBookObj();
+        //NOT POSSIBLE
+        int daysAfterBorrow = (int) ChronoUnit.DAYS.between(renewedBook.getBorrowDate(), LocalDate.now());
+        if(renewedBook.getRenewalFois()>=Constants.MAX_RENEWAL_TIMES || daysAfterBorrow>Constants.MAX_BORROW_DAYS) {
+            //RESTAR LIBRO AL USUARIO
+
+            currUser.setBorrowedBooks(currUser.getBorrowedBooks()-1);
+            userRepository.save(currUser);
+            renewedBook.setUserObj(currUser);
+            //CAMBIAR DISPONIBILIDAD LIBRO
+
+            currBook.setAvailable(true);
+            bookService.create(currBook);
+            renewedBook.setBookObj(currBook);
+            if(daysAfterBorrow>Constants.MAX_BORROW_DAYS){
+                renewedBook = borrowingService.penalizeAndDeliver(renewedBook, Constants.PENALIZATION_FEE_PER_DAY_LATE*(daysAfterBorrow-Constants.MAX_BORROW_DAYS));
+            }
+            if(renewedBook.getRenewalFois()>=Constants.MAX_RENEWAL_TIMES){
+                renewedBook = borrowingService.delivered(renewedBook);
+            }
+            return ResponseEntity.badRequest().body("Couldn't renew, book was returned");
+        }else{
+            renewedBook = borrowingService.renew(renewedBook);
+            return ResponseEntity.ok().body(renewedBook);
+        }
+
     }
 
     public Borrowing formatBorrowEntity(Borrowing borrowing) throws Exception{
