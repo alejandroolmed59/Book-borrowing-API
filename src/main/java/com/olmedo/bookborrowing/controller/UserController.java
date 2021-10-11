@@ -3,6 +3,7 @@ package com.olmedo.bookborrowing.controller;
 import com.olmedo.bookborrowing.entity.User;
 import com.olmedo.bookborrowing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,27 @@ public class UserController {
             return createdUser;
         }
     }
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody User newValues, @PathVariable String id) throws Exception {
+        User found = userService.findById(id);
 
+        if (found == null) {
+            throw new Exception("Role were not found with id=" + id);
+        } else {
+            found = userService.update(found, newValues);
+            return ResponseEntity.ok(found);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable String id) throws Exception {
+        User found = userService.findById(id);
 
+        if (found == null) {
+            throw new Exception("Role were not found with id=" + id);
+        } else {
+            userService.delete(found);
+            return ResponseEntity.ok().body("Eliminado");
+        }
+    }
 
 }

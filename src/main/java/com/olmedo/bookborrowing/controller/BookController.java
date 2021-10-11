@@ -40,4 +40,26 @@ public class BookController {
         //Boolean ocupado = book.getBorrows().stream().anyMatch(borrowing -> borrowing.getDelivered()==false);
         return new ResponseEntity("ocupado= ", HttpStatus.OK );
     }
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody Book newValues, @PathVariable String id) throws Exception {
+        Book found = bookService.findByIsbn(id);
+
+        if (found == null) {
+            throw new Exception("Book were not found with id=" + id);
+        } else {
+            found = bookService.update(found, newValues);
+            return ResponseEntity.ok(found);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable String id) throws Exception {
+        Book found = bookService.findByIsbn(id);
+
+        if (found == null) {
+            throw new Exception("Role were not found with id=" + id);
+        } else {
+            bookService.delete(found);
+            return ResponseEntity.ok().body("Eliminado");
+        }
+    }
 }

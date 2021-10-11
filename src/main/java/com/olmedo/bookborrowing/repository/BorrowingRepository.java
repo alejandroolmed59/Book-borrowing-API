@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
     Borrowing findByUserObjUserIdAndBookObjBookISBNAndDeliveredFalse(String userId, String BookISBN);
+
+    Borrowing findByOrderId(String id);
 }

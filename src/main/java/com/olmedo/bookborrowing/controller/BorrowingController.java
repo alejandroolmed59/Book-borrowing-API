@@ -111,6 +111,28 @@ public class BorrowingController {
         }
 
     }
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody Borrowing newValues, @PathVariable String id) throws Exception {
+        Borrowing found = borrowingService.findById(id);
+
+        if (found == null) {
+            throw new Exception("Book were not found with id=" + id);
+        } else {
+            found = borrowingService.update(found, newValues);
+            return ResponseEntity.ok(found);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable String id) throws Exception {
+        Borrowing found = borrowingService.findById(id);
+
+        if (found == null) {
+            throw new Exception("Role were not found with id=" + id);
+        } else {
+            borrowingService.delete(found);
+            return ResponseEntity.ok().body("Eliminado");
+        }
+    }
 
     public Borrowing formatBorrowEntity(Borrowing borrowing) throws Exception{
         User user = userRepository.findByUserId(borrowing.getUserObj().getUserId());

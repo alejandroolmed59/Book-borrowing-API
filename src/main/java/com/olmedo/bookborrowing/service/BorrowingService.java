@@ -1,6 +1,7 @@
 package com.olmedo.bookborrowing.service;
 
 import com.olmedo.bookborrowing.entity.Borrowing;
+import com.olmedo.bookborrowing.entity.Genre;
 import com.olmedo.bookborrowing.repository.BorrowingRepository;
 import com.olmedo.bookborrowing.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,22 @@ public class BorrowingService {
         renewedBook.setDueDate(LocalDate.now().plusDays(Constants.MAX_BORROW_DAYS));
         renewedBook.setRenewalFois(renewedBook.getRenewalFois()+1);
         return borrowingRepository.save(renewedBook);
+    }
+
+    public Borrowing findById(String id) {
+        return borrowingRepository.findByOrderId(id);
+    }
+
+    public Borrowing update(Borrowing found, Borrowing newValues) {
+        found.setBorrowDate(newValues.getBorrowDate());
+        found.setDueDate(newValues.getDueDate());
+        found.setRealReturnDate(newValues.getRealReturnDate());
+        found.setRenewalFois(newValues.getRenewalFois());
+        found.setPenalization(newValues.getPenalization());
+        found.setDelivered(newValues.getDelivered());
+        return borrowingRepository.save(found);
+    }
+    public void delete(Borrowing found) {
+        borrowingRepository.delete(found);
     }
 }

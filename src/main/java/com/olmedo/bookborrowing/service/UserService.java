@@ -18,4 +18,14 @@ public class UserService {
     public User create(User newUser){return userRepository.save(newUser);}
 
     public User findById(String id){return userRepository.findByUserId(id);}
+
+    public User update(User found, User newValues) {
+        found.setName(newValues.getName());
+        found.setEmail(newValues.getEmail());
+        found.setPhoneNumber(newValues.getPhoneNumber());
+        return userRepository.save(found);
+    }
+    public void delete(User found) {
+        userRepository.delete(found);
+    }
 }
