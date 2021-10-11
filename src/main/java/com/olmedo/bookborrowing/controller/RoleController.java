@@ -24,7 +24,7 @@ public class RoleController {
         Role createdRole = roleService.create(role);
 
         if (createdRole==null) {
-            throw new Exception("BedType were not created");
+            throw new Exception("Rol no creado");
         } else {
             return createdRole;
         }
