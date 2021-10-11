@@ -15,4 +15,17 @@ public class RoleService {
     public List<Role> findAll(){return roleRepository.findAll();}
 
     public Role create(Role newRole){return roleRepository.save(newRole);}
+
+    public Role findById(Integer id) {
+        return roleRepository.findByRoleId(id);
+    }
+
+    public Role update(Role role, Role newValuesRole) {
+        role.setRoleType(newValuesRole.getRoleType());
+        return roleRepository.save(role);
+    }
+
+    public void delete(Role foundRole) {
+        roleRepository.delete(foundRole);
+    }
 }

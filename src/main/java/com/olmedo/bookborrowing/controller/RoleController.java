@@ -3,6 +3,9 @@ package com.olmedo.bookborrowing.controller;
 import com.olmedo.bookborrowing.entity.Role;
 import com.olmedo.bookborrowing.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +30,28 @@ public class RoleController {
             throw new Exception("Rol no creado");
         } else {
             return createdRole;
+        }
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity update(@RequestBody Role newValuesRole, @PathVariable Integer id) throws Exception {
+        Role foundRole = roleService.findById(id);
+
+        if (foundRole == null) {
+            throw new Exception("Role were not found with id=" + id);
+        } else {
+            foundRole = roleService.update(foundRole, newValuesRole);
+            return ResponseEntity.ok(foundRole);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Integer id) throws Exception {
+        Role foundRole = roleService.findById(id);
+
+        if (foundRole == null) {
+            throw new Exception("Role were not found with id=" + id);
+        } else {
+            roleService.delete(foundRole);
+            return ResponseEntity.ok().body("Eliminado");
         }
     }
 }
