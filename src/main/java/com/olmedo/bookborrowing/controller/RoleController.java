@@ -37,7 +37,7 @@ public class RoleController {
         Role foundRole = roleService.findById(id);
 
         if (foundRole == null) {
-            throw new Exception("Role were not found with id=" + id);
+            throw new Exception("Role not found with id=" + id);
         } else {
             foundRole = roleService.update(foundRole, newValuesRole);
             return ResponseEntity.ok(foundRole);
@@ -48,7 +48,7 @@ public class RoleController {
         Role foundRole = roleService.findById(id);
 
         if (foundRole == null) {
-            throw new Exception("Role were not found with id=" + id);
+            throw new Exception("Role not found with id=" + id);
         } else {
             roleService.delete(foundRole);
             return ResponseEntity.ok().body("Eliminado");

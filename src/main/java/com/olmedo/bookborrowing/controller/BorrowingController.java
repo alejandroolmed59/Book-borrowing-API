@@ -116,7 +116,7 @@ public class BorrowingController {
         Borrowing found = borrowingService.findById(id);
 
         if (found == null) {
-            throw new Exception("Book were not found with id=" + id);
+            throw new Exception("Book not found with id=" + id);
         } else {
             found = borrowingService.update(found, newValues);
             return ResponseEntity.ok(found);
@@ -127,7 +127,7 @@ public class BorrowingController {
         Borrowing found = borrowingService.findById(id);
 
         if (found == null) {
-            throw new Exception("Role were not found with id=" + id);
+            throw new Exception("Role not found with id=" + id);
         } else {
             borrowingService.delete(found);
             return ResponseEntity.ok().body("Eliminado");
@@ -138,7 +138,7 @@ public class BorrowingController {
         User user = userRepository.findByUserId(borrowing.getUserObj().getUserId());
         Book book = bookService.findByIsbn(borrowing.getBookObj().getBookISBN());
         if(user.getBorrowedBooks()>=3){
-            throw new MaxBooksPerUserException("User can no borrow more than "+Constants.MAX_BOOKS_PER_USER+" books at the same time");
+            throw new MaxBooksPerUserException("User cannot borrow more than "+Constants.MAX_BOOKS_PER_USER+" books at the same time");
         }
         if(book.getAvailable()==false){
             throw new BookAlreadyReservedException("Book is already taken!");

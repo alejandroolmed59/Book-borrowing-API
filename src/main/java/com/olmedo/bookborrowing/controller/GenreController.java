@@ -26,7 +26,7 @@ public class GenreController {
         Genre createdGenre = genreService.create(genre);
 
         if (createdGenre==null) {
-            throw new Exception("Genre was not created");
+            throw new Exception("Genre not created");
         } else {
             return createdGenre;
         }
@@ -36,7 +36,7 @@ public class GenreController {
         Genre found = genreService.findById(id);
 
         if (found == null) {
-            throw new Exception("Role were not found with id=" + id);
+            throw new Exception("Role not found with id=" + id);
         } else {
             found = genreService.update(found, newValues);
             return ResponseEntity.ok(found);
@@ -47,7 +47,7 @@ public class GenreController {
         Genre found = genreService.findById(id);
 
         if (found == null) {
-            throw new Exception("Role were not found with id=" + id);
+            throw new Exception("Role not found with id=" + id);
         } else {
             genreService.delete(found);
             return ResponseEntity.ok().body("Eliminado");

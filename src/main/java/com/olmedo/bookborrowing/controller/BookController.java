@@ -45,7 +45,7 @@ public class BookController {
         Book found = bookService.findByIsbn(id);
 
         if (found == null) {
-            throw new Exception("Book were not found with id=" + id);
+            throw new Exception("Book not found with id=" + id);
         } else {
             found = bookService.update(found, newValues);
             return ResponseEntity.ok(found);
@@ -56,7 +56,7 @@ public class BookController {
         Book found = bookService.findByIsbn(id);
 
         if (found == null) {
-            throw new Exception("Role were not found with id=" + id);
+            throw new Exception("Role not found with id=" + id);
         } else {
             bookService.delete(found);
             return ResponseEntity.ok().body("Eliminado");

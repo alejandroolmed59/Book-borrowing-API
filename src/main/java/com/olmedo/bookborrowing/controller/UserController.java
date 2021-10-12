@@ -29,7 +29,7 @@ public class UserController {
         User createdUser = userService.create(newUser);
 
         if (createdUser==null) {
-            throw new Exception("BedType were not created");
+            throw new Exception("BedType not created");
         } else {
             return createdUser;
         }
@@ -39,7 +39,7 @@ public class UserController {
         User found = userService.findById(id);
 
         if (found == null) {
-            throw new Exception("Role were not found with id=" + id);
+            throw new Exception("Role not found with id=" + id);
         } else {
             found = userService.update(found, newValues);
             return ResponseEntity.ok(found);
@@ -50,7 +50,7 @@ public class UserController {
         User found = userService.findById(id);
 
         if (found == null) {
-            throw new Exception("Role were not found with id=" + id);
+            throw new Exception("Role not found with id=" + id);
         } else {
             userService.delete(found);
             return ResponseEntity.ok().body("Eliminado");
