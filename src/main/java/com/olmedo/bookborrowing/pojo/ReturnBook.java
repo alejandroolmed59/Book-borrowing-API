@@ -11,6 +11,11 @@ public class ReturnBook {
     private String userId;
     private String bookISBN;
 
+    public ReturnBook(String userId, String bookISBN) {
+        this.userId = userId;
+        this.bookISBN = bookISBN;
+    }
+
     public String getUserId() {
         return userId;
     }

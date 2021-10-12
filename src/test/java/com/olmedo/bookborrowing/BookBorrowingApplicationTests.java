@@ -4,6 +4,7 @@ import com.olmedo.bookborrowing.controller.BorrowingController;
 import com.olmedo.bookborrowing.entity.Book;
 import com.olmedo.bookborrowing.entity.Borrowing;
 import com.olmedo.bookborrowing.entity.User;
+import com.olmedo.bookborrowing.pojo.ReturnBook;
 import com.olmedo.bookborrowing.service.BookService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,5 +38,13 @@ class BookBorrowingApplicationTests {
         assertThat(borrowingController.create(borrowing));
     }
 
+
+    @Test
+    void retunrBookTest() throws Exception {
+        String userId="00097017";
+        String bookISBN="0192861891"; //ERR W/ 3124412342
+        assertThat(borrowingController.returnBook(new ReturnBook(userId, bookISBN)));
+
+    }
 
 }
